@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compat Matrix – Compare Browser Feature Support</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' };
+  </script>
+</head>
+<body class="bg-gray-100 dark:bg-[#1c202b] min-h-screen p-6">
+  <div class="max-w-6xl mx-auto bg-white dark:bg-gray-800 shadow-xl rounded-3xl p-6 space-y-6">
+    <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Compat Matrix</h1>
+    <p>Compare browser feature support. Based on data of <a href="https://caniuse.com/">Can I use</a>. Supported means, any version of the said browser supports the feature. Even future ones.</p>
+
+    <fieldset class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 pt-8 rounded-xl shadow-xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <legend class="w-full text-lg font-semibold text-gray-800 dark:text-gray-200 mb-6 pl-2">Browser and Category Filters</legend>
+      <div class="flex flex-col">
+        <label for="chrome" class="text-sm font-medium text-gray-700 dark:text-gray-300">Chrome</label>
+        <select id="chrome" class="mt-1 h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-4 py-2 text-sm placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 focus:transition-shadow focus:duration-150 focus:ring-offset-1">
+          <option>Any</option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+      <div class="flex flex-col">
+        <label for="firefox" class="text-sm font-medium text-gray-700 dark:text-gray-300">Firefox</label>
+        <select id="firefox" class="mt-1 h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-4 py-2 text-sm placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 focus:transition-shadow focus:duration-150 focus:ring-offset-1">
+          <option>Any</option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+      <div class="flex flex-col">
+        <label for="safari" class="text-sm font-medium text-gray-700 dark:text-gray-300">Safari</label>
+        <select id="safari" class="mt-1 h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-4 py-2 text-sm placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 focus:transition-shadow focus:duration-150 focus:ring-offset-1">
+          <option>Any</option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+      <div class="flex flex-col">
+        <label for="category" class="text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+        <select id="category" class="mt-1 h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-4 py-2 text-sm placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 focus:transition-shadow focus:duration-150 focus:ring-offset-1">
+          <option>All Categories</option>
+        </select>
+      </div>
+      <div class="flex flex-col flex-grow min-w-[200px] lg:col-span-2">
+        <label for="filter-text" class="text-sm font-medium text-gray-700 dark:text-gray-300">Filter text</label>
+        <input type="text" id="filter-text" placeholder="e.g. Audio" class="mt-1 h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-4 py-2 text-sm placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 focus:transition-shadow focus:duration-150 focus:ring-offset-1" />
+      </div>
+    </fieldset>
+
+    <div class="text-sm text-gray-700 dark:text-gray-300">
+      <output id="result-count" aria-live="polite">0 results</output>
+    </div>
+
+    <div class="overflow-x-auto overflow-hidden rounded-lg">
+      <table class="min-w-full border-collapse text-sm caption-top">
+        <caption class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Feature support comparison for selected browsers</caption>
+        <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 uppercase text-xs tracking-wider">
+          <tr>
+            <th scope="col" class="sticky top-0 z-10 bg-gray-100 dark:bg-gray-700 rounded-tl-lg text-left px-4 py-3">Feature</th>
+            <th scope="col" class="sticky top-0 z-10 bg-gray-100 dark:bg-gray-700 text-left px-4 py-3">Chrome</th>
+            <th scope="col" class="sticky top-0 z-10 bg-gray-100 dark:bg-gray-700 text-left px-4 py-3">Firefox</th>
+            <th scope="col" class="sticky top-0 z-10 bg-gray-100 dark:bg-gray-700 text-left px-4 py-3">Safari</th>
+            <th scope="col" class="sticky top-0 z-10 bg-gray-100 dark:bg-gray-700 rounded-tr-lg text-left px-4 py-3">Description</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-800 dark:text-gray-100">
+          <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <td colspan="5" class="px-4 py-3">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    let allFeatures = {};
+
+    async function loadData() {
+      try {
+        const res = await fetch('https://raw.githubusercontent.com/Fyrd/caniuse/main/data.json');
+        if (!res.ok) throw new Error('Failed to fetch feature data');
+        const json = await res.json();
+        allFeatures = json.data;
+        normalizeCategories();
+        populateCategories();
+        renderTable();
+      } catch (e) {
+        console.error('Error loading feature data:', e);
+        const tbody = document.querySelector('tbody');
+        tbody.innerHTML = `<tr class="border-b border-gray-200 dark:border-gray-600"><td colspan="5" class="px-4 py-3 text-red-600">Error loading data: ${e.message}</td></tr>`;
+      }
+    }
+
+    function normalizeCategories() {
+      Object.values(allFeatures).forEach(f => {
+        if (!f.categories) return;
+        f.categories = f.categories.map(cat => {
+          if (cat.toLowerCase().startsWith('css')) return 'CSS';
+          if (cat.toLowerCase() === 'html5') return 'HTML';
+          return cat;
+        });
+      });
+    }
+
+    function populateCategories() {
+      const cats = new Set();
+      Object.values(allFeatures).forEach(f => (f.categories || []).forEach(c => cats.add(c)));
+      const sel = document.getElementById('category');
+      [...cats].sort().forEach(c => {
+        const opt = document.createElement('option'); opt.value = c; opt.textContent = c; sel.append(opt);
+      });
+    }
+
+    function renderMarkdown(str) {
+      const div = document.createElement('div');
+      return div.innerHTML = str
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    }
+
+    function statsToBadge(stats) {
+      const supported = Object.values(stats).some(v => v.startsWith('y'));
+      if (supported) {
+        return `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 dark:bg-emerald-700">
+          <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" role="graphics-symbol">
+            <title>Supported</title>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </span>`;
+      } else {
+        return `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-rose-500 dark:bg-rose-700">
+          <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" role="graphics-symbol">
+            <title>Not supported</title>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </span>`;
+      }
+    }
+
+    function renderTable() {
+      console.log('renderTable called');
+      const countOut = document.getElementById('result-count');
+      const tbody = document.querySelector('tbody');
+      tbody.innerHTML = '';
+      let count = 0;
+
+      const cf = document.getElementById('chrome').value;
+      const ff = document.getElementById('firefox').value;
+      const sf = document.getElementById('safari').value;
+      const cat = document.getElementById('category').value;
+      const txt = document.getElementById('filter-text').value.trim().toLowerCase();
+
+      Object.entries(allFeatures).forEach(([key, feature]) => {
+        const ch = feature.stats.chrome || {};
+        const fi = feature.stats.firefox || {};
+        const sa = feature.stats.safari || {};
+
+        const okCat = cat === 'All Categories' || (feature.categories || []).includes(cat);
+        const okText = feature.title.toLowerCase().includes(txt) || (feature.description || '').toLowerCase().includes(txt);
+
+        if (okCat && okText && isSup(ch, cf) && isSup(fi, ff) && isSup(sa, sf)) {
+          tbody.insertAdjacentHTML('beforeend', `
+            <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+              <td class="px-4 py-3 font-medium">${feature.title}</td>
+              <td class="px-4 py-3 text-center">${statsToBadge(ch)}</td>
+              <td class="px-4 py-3 text-center">${statsToBadge(fi)}</td>
+              <td class="px-4 py-3 text-center">${statsToBadge(sa)}</td>
+              <td class="px-4 py-3">${renderMarkdown(feature.description || '')}</td>
+            </tr>
+          `);
+          count++;
+        }
+      });
+      countOut.textContent = `${count} ${count === 1 ? 'result' : 'results'}`;
+    }
+
+    function isSup(stats, exp) {
+      if (exp === 'Any') return true;
+      const hasYes = Object.values(stats).some(v => v.startsWith('y'));
+      return exp === 'Yes' ? hasYes : !hasYes;
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      ['chrome','firefox','safari','category'].forEach(id => document.getElementById(id).addEventListener('change', renderTable));
+      document.getElementById('filter-text').addEventListener('input', renderTable);
+      await loadData();
+    });
+  </script>
+</body>
+</html>
