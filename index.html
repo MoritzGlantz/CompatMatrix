@@ -20,7 +20,7 @@
   </a>
   <div class="max-w-6xl mx-auto bg-white dark:bg-gray-800 shadow-xl rounded-3xl p-6 space-y-6 relative">
     <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Compat Matrix</h1>
-    <p>Compare browser feature support. Based on data of <a href="https://caniuse.com/">Can I use</a>. Supported means, any version of the said browser supports the feature. Even future ones.</p>
+    <p>Compare browser feature support. Based on data of <a href="https://caniuse.com/" class="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-200 transition-colors">Can I use</a>. Supported means, any version of the said browser supports the feature. Even future ones.</p>
 
     <fieldset class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 pt-8 rounded-xl shadow-xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <legend class="w-full text-lg font-semibold text-gray-800 dark:text-gray-200 mb-6 pl-2">Browser and Category Filters</legend>
@@ -133,8 +133,8 @@
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/`([^`]+)`/g, '<code>$1</code>')
-        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
-      return DOMPurify.sanitize(dirty, {ALLOWED_TAGS: ['strong','code','a'], ALLOWED_ATTR: ['href','target','rel']});
+        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-200 transition-colors">$1</a>');
+      return DOMPurify.sanitize(dirty, {ALLOWED_TAGS: ['strong','code','a'], ALLOWED_ATTR: ['href','target','rel','class']});
     }
 
     function statsToBadge(stats, browser) {
