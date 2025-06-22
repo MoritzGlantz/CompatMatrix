@@ -84,10 +84,10 @@
 
     async function loadData() {
       try {
-        const res = await fetch('https://raw.githubusercontent.com/Fyrd/caniuse/main/data.json');
+        const res = await fetch('https://raw.githubusercontent.com/Fyrd/caniuse/main/fulldata-json/data-2.0.json');
         if (!res.ok) throw new Error('Failed to fetch feature data');
         const json = await res.json();
-        allFeatures = json.data;
+        allFeatures = json.data ? Object.values(json.data) : [];
         normalizeCategories();
         populateCategories();
         renderTable();
@@ -99,7 +99,7 @@
     }
 
     function normalizeCategories() {
-      Object.values(allFeatures).forEach(f => {
+      allFeatures.forEach(f => {
         if (!f.categories) return;
         f.categories = f.categories.map(cat => {
           if (cat.toLowerCase().startsWith('css')) return 'CSS';
@@ -111,8 +111,9 @@
 
     function populateCategories() {
       const cats = new Set();
-      Object.values(allFeatures).forEach(f => (f.categories || []).forEach(c => cats.add(c)));
+      allFeatures.forEach(f => (f.categories || []).forEach(c => cats.add(c)));
       const sel = document.getElementById('category');
+      sel.innerHTML = '<option>All Categories</option>';
       [...cats].sort().forEach(c => {
         const opt = document.createElement('option'); opt.value = c; opt.textContent = c; sel.append(opt);
       });
@@ -127,8 +128,9 @@
       return DOMPurify.sanitize(dirty, {ALLOWED_TAGS: ['strong','code','a'], ALLOWED_ATTR: ['href','target','rel']});
     }
 
-    function statsToBadge(stats) {
-      const supported = Object.values(stats).some(v => v.startsWith('y'));
+    function statsToBadge(stats, browser) {
+      const browserStats = stats && stats[browser] ? stats[browser] : {};
+      const supported = Object.values(browserStats).some(v => typeof v === 'string' && v.startsWith('y'));
       if (supported) {
         return `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 dark:bg-emerald-700">
           <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" role="graphics-symbol">
@@ -147,7 +149,6 @@
     }
 
     function renderTable() {
-      console.log('renderTable called');
       const countOut = document.getElementById('result-count');
       const tbody = document.querySelector('tbody');
       tbody.innerHTML = '';
@@ -159,33 +160,36 @@
       const cat = document.getElementById('category').value;
       const txt = document.getElementById('filter-text').value.trim().toLowerCase();
 
-      Object.entries(allFeatures).forEach(([key, feature]) => {
-        const ch = feature.stats.chrome || {};
-        const fi = feature.stats.firefox || {};
-        const sa = feature.stats.safari || {};
-
+      allFeatures.forEach(feature => {
+        if (!feature.stats || !feature.title) return;
+        if (!feature.stats.chrome && !feature.stats.firefox && !feature.stats.safari) return;
+        const title = typeof feature.title === 'string' ? feature.title : '';
+        const desc = typeof feature.description === 'string' ? feature.description : '';
         const okCat = cat === 'All Categories' || (feature.categories || []).includes(cat);
-        const okText = feature.title.toLowerCase().includes(txt) || (feature.description || '').toLowerCase().includes(txt);
-
-        if (okCat && okText && isSup(ch, cf) && isSup(fi, ff) && isSup(sa, sf)) {
+        const okText = (!txt || title.toLowerCase().includes(txt) || desc.toLowerCase().includes(txt));
+        if (okCat && okText && isSup(feature.stats, 'chrome', cf) && isSup(feature.stats, 'firefox', ff) && isSup(feature.stats, 'safari', sf)) {
           tbody.insertAdjacentHTML('beforeend', `
             <tr class="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
-              <td class="px-4 py-3 font-medium">${feature.title}</td>
-              <td class="px-4 py-3 text-center">${statsToBadge(ch)}</td>
-              <td class="px-4 py-3 text-center">${statsToBadge(fi)}</td>
-              <td class="px-4 py-3 text-center">${statsToBadge(sa)}</td>
-              <td class="px-4 py-3">${renderMarkdown(feature.description || '')}</td>
+              <td class="px-4 py-3 font-medium">${title}</td>
+              <td class="px-4 py-3 text-center">${statsToBadge(feature.stats, 'chrome')}</td>
+              <td class="px-4 py-3 text-center">${statsToBadge(feature.stats, 'firefox')}</td>
+              <td class="px-4 py-3 text-center">${statsToBadge(feature.stats, 'safari')}</td>
+              <td class="px-4 py-3">${renderMarkdown(desc)}</td>
             </tr>
           `);
           count++;
         }
       });
       countOut.textContent = `${count} ${count === 1 ? 'result' : 'results'}`;
+      if (count === 0) {
+        tbody.innerHTML = `<tr class=\"border-b border-gray-200 dark:border-gray-600\"><td colspan=\"5\" class=\"px-4 py-3 text-gray-500 dark:text-gray-400\">No results</td></tr>`;
+      }
     }
 
-    function isSup(stats, exp) {
+    function isSup(stats, browser, exp) {
       if (exp === 'Any') return true;
-      const hasYes = Object.values(stats).some(v => v.startsWith('y'));
+      const browserStats = stats && stats[browser] ? stats[browser] : {};
+      const hasYes = Object.values(browserStats).some(v => typeof v === 'string' && v.startsWith('y'));
       return exp === 'Yes' ? hasYes : !hasYes;
     }
 
