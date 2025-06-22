@@ -12,7 +12,11 @@
   </script>
 </head>
 <body class="bg-gray-100 dark:bg-[#1c202b] min-h-screen p-6">
-  <div class="max-w-6xl mx-auto bg-white dark:bg-gray-800 shadow-xl rounded-3xl p-6 space-y-6">
+  <div class="max-w-6xl mx-auto bg-white dark:bg-gray-800 shadow-xl rounded-3xl p-6 space-y-6 relative">
+    <a href="https://github.com/moritzglantz/compatmatrix" target="_blank" rel="noopener" class="absolute top-6 right-6 text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1" title="View source on GitHub">
+      <svg class="w-4 h-4 inline" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.53 2.341 1.088 2.91.832.091-.647.35-1.088.636-1.339-2.221-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.987 1.029-2.687-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.7 1.028 1.594 1.028 2.687 0 3.847-2.337 4.695-4.566 4.944.359.309.678.919.678 1.853 0 1.337-.012 2.419-.012 2.749 0 .267.18.577.688.479C19.138 20.2 22 16.447 22 12.021 22 6.484 17.523 2 12 2z"/></svg>
+      GitHub
+    </a>
     <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Compat Matrix</h1>
     <p>Compare browser feature support. Based on data of <a href="https://caniuse.com/">Can I use</a>. Supported means, any version of the said browser supports the feature. Even future ones.</p>
 
@@ -226,5 +230,28 @@
       await loadData();
     });
   </script>
+  <!-- Matomo -->
+    <script>
+        var _paq = window._paq = window._paq || [];
+        _paq.push(['trackEvent', 'Theme', 'Preference', (
+			window.matchMedia &&
+			window.matchMedia('(prefers-color-scheme: dark)').media !== 'not all'
+				? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+				: 'unsupported'
+		)]);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+        var u="https://m0g1.uber.space/piwik/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '5']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+        })();
+    </script>
+    <noscript>
+        <img referrerpolicy="no-referrer-when-downgrade" src="https://m0g1.uber.space/piwik/matomo.php?idsite=5&amp;rec=1" style="border:0" alt="" />
+    </noscript>
+    <!-- End Matomo Code -->
 </body>
 </html>
