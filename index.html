@@ -24,6 +24,7 @@
           <option>Any</option>
           <option>Yes</option>
           <option>No</option>
+          <option>Partial</option>
         </select>
       </div>
       <div class="flex flex-col">
@@ -32,6 +33,7 @@
           <option>Any</option>
           <option>Yes</option>
           <option>No</option>
+          <option>Partial</option>
         </select>
       </div>
       <div class="flex flex-col">
@@ -40,6 +42,7 @@
           <option>Any</option>
           <option>Yes</option>
           <option>No</option>
+          <option>Partial</option>
         </select>
       </div>
       <div class="flex flex-col">
@@ -130,12 +133,22 @@
 
     function statsToBadge(stats, browser) {
       const browserStats = stats && stats[browser] ? stats[browser] : {};
-      const supported = Object.values(browserStats).some(v => typeof v === 'string' && v.startsWith('y'));
+      const values = Object.values(browserStats).filter(v => typeof v === 'string');
+      const supported = values.some(v => v.startsWith('y'));
+      const partial = values.some(v => v.startsWith('a'));
       if (supported) {
         return `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 dark:bg-emerald-700">
           <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" role="graphics-symbol">
             <title>Supported</title>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </span>`;
+      } else if (partial) {
+        return `<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-400 dark:bg-yellow-600">
+          <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" role="graphics-symbol">
+            <title>Partial support</title>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 12h12" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12" opacity="0.3" />
           </svg>
         </span>`;
       } else {
@@ -189,11 +202,25 @@
     function isSup(stats, browser, exp) {
       if (exp === 'Any') return true;
       const browserStats = stats && stats[browser] ? stats[browser] : {};
-      const hasYes = Object.values(browserStats).some(v => typeof v === 'string' && v.startsWith('y'));
-      return exp === 'Yes' ? hasYes : !hasYes;
+      const values = Object.values(browserStats).filter(v => typeof v === 'string');
+      const hasYes = values.some(v => v.startsWith('y'));
+      const hasPartial = values.some(v => v.startsWith('a'));
+      if (exp === 'Yes') return hasYes;
+      if (exp === 'No') return !hasYes && !hasPartial;
+      if (exp === 'Partial') return hasPartial && !hasYes;
+      return true;
     }
 
     window.addEventListener('DOMContentLoaded', async () => {
+      ['chrome','firefox','safari'].forEach(id => {
+        const sel = document.getElementById(id);
+        if (sel && !Array.from(sel.options).some(o => o.value === 'Partial')) {
+          const opt = document.createElement('option');
+          opt.value = 'Partial';
+          opt.textContent = 'Partial';
+          sel.appendChild(opt);
+        }
+      });
       ['chrome','firefox','safari','category'].forEach(id => document.getElementById(id).addEventListener('change', renderTable));
       document.getElementById('filter-text').addEventListener('input', renderTable);
       await loadData();
