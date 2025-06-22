@@ -1,0 +1,12 @@
+{
+  "name": "Compat Matrix",
+  "version": "1.0.0",
+  "main": "index.html",
+  "scripts": {
+    "deploy": "export $(cat .env | xargs) && rsync -avz --delete --delete-excluded --exclude package.json --exclude .git --exclude .env --exclude .gitignore --exclude README.md --exclude .DS_Store ./ $DEPLOY_TARGET",
+    "release": "npm run deploy"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
